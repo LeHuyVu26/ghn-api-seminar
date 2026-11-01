@@ -53,13 +53,6 @@ Ví dụ body `POST /shipping/fee`:
   "length": 20, "width": 15, "height": 10, "insurance_value": 200000, "service_type_id": 2 }
 ```
 
-## Tích hợp lại vào microservice khác
-Copy `app/ghn_client.py` + `app/config.py`, sau đó:
-```python
-from app.ghn_client import ghn
-fee = await ghn.calculate_fee({...})
-```
-
 ## Lỗi thường gặp
 | Lỗi | Nguyên nhân / cách xử lý |
 |-----|--------------------------|
