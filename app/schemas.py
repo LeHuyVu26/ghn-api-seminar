@@ -10,8 +10,7 @@ class FeeRequest(BaseModel):
     width: int = Field(15, ge=1, description="cm")
     height: int = Field(10, ge=1, description="cm")
     insurance_value: int = Field(0, ge=0, description="Giá trị hàng hóa (VND) để bảo hiểm")
-    service_type_id: int = Field(2, description="2 = Hàng nhẹ (<20kg), 5 = Hàng nặng")
-
+    
 
 class OrderItem(BaseModel):
     name: str = Field(..., examples=["Áo thun"])
@@ -33,7 +32,6 @@ class CreateOrderRequest(BaseModel):
     width: int = 15
     height: int = 10
     insurance_value: int = 0
-    service_type_id: int = 2
     payment_type_id: int = Field(2, description="1 = Shop trả phí, 2 = Người nhận trả phí")
     required_note: str = Field(
         "KHONGCHOXEMHANG",

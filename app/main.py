@@ -41,15 +41,27 @@ async def wards(district_id: int = Query(..., examples=[1444])):
 
 
 # ---------------- 1. Shipping fee ----------------
-@app.get("/shipping/services", tags=["1. Shipping fee"], summary="Các gói dịch vụ khả dụng")
-async def services(to_district_id: int = Query(..., examples=[1442])):
-    return await ghn.available_services(to_district_id)
-
-
-@app.post("/shipping/fee", tags=["1. Shipping fee"], summary="Ước tính phí vận chuyển")
+@app.post("/shipping/fee", tags=["1. Shipping fee"], summary="Ước tính phí")
 async def shipping_fee(req: FeeRequest):
-    return await ghn.calculate_fee(req.model_dump())
+    data = req.model_dump()
 
+    if data["weight"] >= 20000:
+        data["service_type_id"] = 5
+        data["items"] = [
+            {
+                "name": "Hàng hóa",
+                "quantity": 1,
+                "weight": data["weight"],
+                "length": data["length"],
+                "width": data["width"],
+                "height": data["height"],
+                "price": data.get("insurance_value", 0)
+            }
+        ]
+    else:
+        data["service_type_id"] = 2
+
+    return await ghn.calculate_fee(data)    
 
 # ---------------- 2. Order creation ----------------
 @app.post("/orders", tags=["2. Order creation"], summary="Tạo đơn vận chuyển", status_code=201)
