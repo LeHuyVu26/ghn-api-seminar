@@ -13,12 +13,10 @@ app = FastAPI(
     version="1.0.0",
 )
 
-
 @app.exception_handler(GHNError)
 async def ghn_error_handler(request, exc: GHNError):
     return JSONResponse(status_code=exc.status_code,
                         content={"error": exc.message, "ghn_code": exc.code})
-
 
 @app.get("/", include_in_schema=False)
 def root():
@@ -29,16 +27,13 @@ def root():
 async def provinces():
     return await ghn.provinces()
 
-
 @app.get("/master-data/districts", tags=["Master data"], summary="Quận/huyện theo tỉnh")
 async def districts(province_id: int = Query(..., examples=[202])):
     return await ghn.districts(province_id)
 
-
 @app.get("/master-data/wards", tags=["Master data"], summary="Phường/xã theo quận")
 async def wards(district_id: int = Query(..., examples=[1444])):
     return await ghn.wards(district_id)
-
 
 # ---------------- 1. Shipping fee ----------------
 @app.post("/shipping/fee", tags=["1. Shipping fee"], summary="Ước tính phí")
@@ -71,11 +66,9 @@ async def create_order(req: CreateOrderRequest):
         payload["items"] = [{"name": req.content, "quantity": 1, "weight": req.weight}]
     return await ghn.create_order(payload)
 
-
 @app.post("/orders/{order_code}/cancel", tags=["2. Order creation"], summary="Huỷ đơn")
 async def cancel_order(order_code: str):
     return await ghn.cancel_order(order_code)
-
 
 # ---------------- 3. Tracking ----------------
 @app.get("/orders/{order_code}/tracking", tags=["3. Shipment tracking"],

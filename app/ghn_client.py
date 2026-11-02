@@ -60,13 +60,6 @@ class GHNClient:
         return await self._request("POST", "/master-data/ward", json={"district_id": district_id})
 
     # ---------- Shipping fee ----------
-    async def available_services(self, to_district_id: int):
-        return await self._request("POST", "/v2/shipping-order/available-services", json={
-            "shop_id": self.shop_id,
-            "from_district": config.FROM_DISTRICT_ID,
-            "to_district": to_district_id,
-        })
-
     async def calculate_fee(self, data: Dict[str, Any]):
         payload = {
             "from_district_id": config.FROM_DISTRICT_ID,
